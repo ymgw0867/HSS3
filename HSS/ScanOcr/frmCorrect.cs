@@ -460,6 +460,8 @@ namespace HSS3.ScanOcr
             string TimeS2 = string.Empty;
             string TimeE2 = string.Empty;
 
+            string sID = string.Empty;  // 職種ＩＤ 2019/10/30
+
             while (dR.Read())
             {
                 sCom2.Parameters.Clear();
@@ -468,6 +470,8 @@ namespace HSS3.ScanOcr
                 {
                     if (mst[i].sCode == dR["個人番号"].ToString())
                     {
+                        sID = mst[i].sSID;  // 職種ＩＤ取得 2019/10/30
+
                         string sSTime = mst[i].sWorkTimeS;
                         string sETime = mst[i].sWorkTimeE;
                         string sSTime2 = mst[i].sWorkTimeS2;
@@ -493,9 +497,10 @@ namespace HSS3.ScanOcr
                             TimeE = sETime.PadLeft(5, '0');
                             TimeJ = (Utility.TimeToMin(TimeE) - Utility.TimeToMin(TimeS) - 60) / 2;
 
-                            if (global._82Card == Utility.StrToInt(global.FLGON))
+                            if (global._82Card == Utility.StrToInt(global.FLGON) || 
+                                Utility.StrToInt(sID) == 7)     // 2019/10/30
                             {
-                                // 八十二カードのとき所定勤務時間の1/2
+                                // 八十二カードまたは他社パートタイマーのとき所定勤務時間の1/2
                                 DateTime dd = DateTime.Parse(TimeS);
 
                                 // 午前半休開始時間 2019/10/07
@@ -512,7 +517,7 @@ namespace HSS3.ScanOcr
                             }
                             else
                             {
-                                // 八十二カード以外 2019/10/07
+                                // 八十二カード以外、他社パートタイマー以外 2019/10/07
                                 amS = global.G_AmS;     // 午前半休開始時間 2019/10/07                               
                                 amE = global.G_AmE;     // 午前半休終了時間取得 
                                 pmS = global.G_PmS;     // 午後半休開始時間取得 
@@ -534,9 +539,10 @@ namespace HSS3.ScanOcr
                             TimeE2 = sETime2.PadLeft(5, '0');
                             TimeJ = (Utility.TimeToMin(TimeE2) - Utility.TimeToMin(TimeS2) - 60) / 2;
 
-                            if (global._82Card == Utility.StrToInt(global.FLGON))
+                            if (global._82Card == Utility.StrToInt(global.FLGON) || 
+                                Utility.StrToInt(sID) == 7)     // 2019/10/30
                             {
-                                // 特殊勤務：八十二カードのとき所定勤務時間の1/2
+                                // 特殊勤務：八十二カードまたは他社パートタイマーのとき所定勤務時間の1/2
                                 DateTime dd = DateTime.Parse(TimeS2);
 
                                 // 特殊勤務午前半休開始時間 2019/10/07
@@ -553,7 +559,7 @@ namespace HSS3.ScanOcr
                             }
                             else
                             {
-                                // 特殊勤務：八十二カード以外 2019/10/07
+                                // 特殊勤務：八十二カード以外、他社パートタイマー以外 2019/10/07
                                 amS2 = global.GT_AmS;     // 午前半休開始時間 2019/10/07                               
                                 amE2 = global.GT_AmE;     // 午前半休終了時間取得 
                                 pmS2 = global.GT_PmS;     // 午後半休開始時間取得 
@@ -629,6 +635,8 @@ namespace HSS3.ScanOcr
             double ShoteiTime2 = 0;
             double ShoteiTime3 = 0;
 
+            string sID = string.Empty;  // 職種ＩＤ 2019/10/30
+
             // 該当項目を初期化します
             this.lblName.Text = string.Empty;
             this.txtShozokuCode.Text = string.Empty;
@@ -652,6 +660,8 @@ namespace HSS3.ScanOcr
             {
                 if (mst[i].sCode == sCode)
                 {
+                    sID = mst[i].sSID;  // 職種ＩＤ取得 2019/10/30
+
                     // マスター情報を画面表示します
                     this.lblName.Text = mst[i].sName;
                     this.txtShozokuCode.Text = mst[i].sTenpoCode;
@@ -670,9 +680,10 @@ namespace HSS3.ScanOcr
                         TimeE = sETime.PadLeft(5, '0');
                         int TimeJ = (Utility.TimeToMin(TimeE) - Utility.TimeToMin(TimeS) - 60) / 2;
 
-                        if (global._82Card == Utility.StrToInt(global.FLGON))
+                        if (global._82Card == Utility.StrToInt(global.FLGON) ||
+                            Utility.StrToInt(sID) == 7)     // 2019/10/30
                         {
-                            // 八十二カードのとき所定勤務時間の1/2
+                            // 八十二カードまたは他社パートタイマーのとき所定勤務時間の1/2
                             DateTime dd = DateTime.Parse(TimeS);
 
                             // 午前半休開始時間 2019/10/07
@@ -719,9 +730,10 @@ namespace HSS3.ScanOcr
                         TimeE2 = sETime2.PadLeft(5, '0');
                         int TimeJ = (Utility.TimeToMin(TimeE2) - Utility.TimeToMin(TimeS2) - 60) / 2;
 
-                        if (global._82Card == Utility.StrToInt(global.FLGON))
+                        if (global._82Card == Utility.StrToInt(global.FLGON) || 
+                            Utility.StrToInt(sID) == 7)     // 2019/10/30
                         {
-                            // 八十二カードのとき所定勤務時間の1/2
+                            // 特殊勤務：八十二カードまたは他社パートタイマーのとき所定勤務時間の1/2
                             DateTime dd = DateTime.Parse(TimeS2);
 
                             // 特殊勤務午前半休開始時間 2019/10/07
@@ -3759,8 +3771,7 @@ namespace HSS3.ScanOcr
 
                 // オーナーのフォームを有効に戻す
                 this.Enabled = true;
-
-
+                
                 // 画像ファイルを退避します
                 tifFileMove(global.sTIFCOM);
 
@@ -3770,6 +3781,7 @@ namespace HSS3.ScanOcr
 
                 // 勤務票レコード削除
                 DelHeadRec();
+
 
                 //// 設定月数分経過した過去画像を削除する　コメント
                 //delBackUpFiles(global.sBKDELS, global.sTIF);
@@ -4998,7 +5010,9 @@ namespace HSS3.ScanOcr
                 SD.sSitumu2 = 0;
 
                 //
-                // 執務時間を設定します
+                //
+                //   執務時間を設定します
+                //
                 //
 
                 // 2015/05/13 午前半休のとき
@@ -5034,6 +5048,10 @@ namespace HSS3.ScanOcr
 
                 // 計算対象とする終了時間
                 //e = SD.SituE;
+
+                // 所定時間内の離席時間分執務時間を延長する 2019/10/30
+                SD.SituE = SD.SituE.AddMinutes(ShoteinaiRiseki);
+
                 if (TimeE < SD.SituE)
                 {
                     // 出勤簿の終了時刻：2019/10/29
@@ -5043,6 +5061,20 @@ namespace HSS3.ScanOcr
                 {
                     e = SD.SituE;
                 }
+
+                //// 所定時間内の離席時間分終了時間を繰り上げる 2019/10/30
+                //DateTime TimeE2019 = TimeE.AddMinutes(ShoteinaiRiseki * (-1));
+
+                //// 2019/10/30
+                //if (TimeE2019 < SD.SituE)
+                //{
+                //    // 出勤簿の終了時刻：2019/10/29
+                //    e = TimeE2019;
+                //}
+                //else
+                //{
+                //    e = SD.SituE;
+                //}
 
                 // 執務時間を計算
                 // 2019/10/29 コメント化
@@ -5079,17 +5111,18 @@ namespace HSS3.ScanOcr
                 // 
                 // 執務時間を計算：2019/10/29 
 
-                if (SD.ShoteiE > e)
+                if (SD.ShoteiE >= e)    // 以上(>=)に変更：2019/10/30
                 {
                     SD.sSitumu2 = 0;
                 }
                 else
                 {
-                    // 所定時間内の離席時間分終了時間を繰り上げる 2019/10/29
-                    DateTime dd = SD.ShoteiE.AddMinutes(ShoteinaiRiseki * (-1));
+                    //// 所定時間内の離席時間分終了時間を繰り上げる 2019/10/29
+                    //DateTime dd = SD.ShoteiE.AddMinutes(ShoteinaiRiseki * (-1));
 
                     // 執務時間
-                    SD.sSitumu2 = Utility.GetTimeSpan(dd, e).TotalMinutes;
+                    //SD.sSitumu2 = Utility.GetTimeSpan(dd, e).TotalMinutes;
+                    SD.sSitumu2 = Utility.GetTimeSpan(SD.ShoteiE, e).TotalMinutes;
 
                     // 執務時間中の離席時間
                     if (TimeRS != TimeNull)
@@ -5154,8 +5187,8 @@ namespace HSS3.ScanOcr
                     }
                 }
 
-                // 離席があるとき終了時刻に離席時間を加算する
-                //if (TimeRS != TimeNull) SD.ShoETime += TimeSpan.Parse(SD.TimeJ2.ToString());
+                //// 離席があるとき終了時刻に離席時間を加算する
+                ////if (TimeRS != TimeNull) SD.ShoETime += TimeSpan.Parse(SD.TimeJ2.ToString());
 
                 // 所定終了時間より終了時間が遅いとき 終了時間までの経過時間を取得します（但し22:00mまで）
                 if (SD.SituE < TimeE)
@@ -5173,8 +5206,16 @@ namespace HSS3.ScanOcr
                     // 残業時間を取得します
                     SD.Zangyo = Utility.GetTimeSpan(SD.SituE, e).TotalMinutes;
 
-                    // 所定時間内の離席時間を差し引く：2019/10/29
-                    SD.Zangyo -= ShoteinaiRiseki; 
+                    // 2019/10/30 コメント化
+                    //// 所定時間内の離席時間を差し引く：2019/10/29
+                    //if (SD.Zangyo < ShoteinaiRiseki)
+                    //{
+                    //    SD.Zangyo = 0;
+                    //}
+                    //else
+                    //{
+                    //    SD.Zangyo -= ShoteinaiRiseki;
+                    //}
                     
                     // 残業時間帯の離席時間を減算します
                     if (TimeRS != TimeNull)
