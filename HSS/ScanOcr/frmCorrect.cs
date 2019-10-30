@@ -4526,7 +4526,7 @@ namespace HSS3.ScanOcr
             SD.sSinya = 0;
             SD.Hayade = 0;
 
-            // 所定時間内の離席時間：2019/10/29
+            // 所定時間内の離席時間の初期化：2019/10/29
             Double ShoteinaiRiseki = 0;
 
             // 所定又は特殊開始終了時間を取得します
